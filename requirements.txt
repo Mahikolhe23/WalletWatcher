@@ -1,0 +1,5 @@
+pandas
+imaplib2
+email
+smtplib
+openpyxl
