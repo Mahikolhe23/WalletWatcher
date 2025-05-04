@@ -2,8 +2,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
-*.DS_Store
+.DS_Store
 config/
+
 # C extensions
 *.so
 
@@ -177,5 +178,5 @@ cython_debug/
 .env
 config/credentials.json
 
-token.pickle
-secret.json
+
+
