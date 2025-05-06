@@ -10,10 +10,9 @@ from bs4 import BeautifulSoup
 def extract_first_date(words):
     for word in words:
         try:
-            # Clean word like '03-05-25.' -> '03-05-25'
             word = word.strip(".,;:")  
             dt = parse(word, dayfirst=True, fuzzy=False)
-            return dt  # return the first valid date found
+            return dt
         except:
             continue
     return None
@@ -43,7 +42,6 @@ def connect_to_gmail():
         headers={"Authorization": f"Bearer {access_token}"}
     ).json()
     user_email = user_info.get('email', 'unknown@domain.com')
-    # print("Authenticated user:", user_email)
 
     # Create the authentication string without base64 encoding
     oauth2_string = f"user={user_email}\x01auth=Bearer {access_token}\x01\x01"
@@ -57,15 +55,12 @@ def connect_to_gmail():
         mail.authenticate('XOAUTH2', lambda x: oauth2_string)
         mail.select("inbox")
 
-        # Search the inbox for emails
         result, data = mail.search(None, "ALL")
 
-        # Ensure the search was successful
         email_ids = []
         df = pd.DataFrame(columns=columns)    
         if result == "OK":
             email_ids = data[0].split()[-20:]
-            # print("Recent Email IDs:", email_ids)
         else:
             print("Search failed:", result)
 
@@ -96,10 +91,9 @@ def connect_to_gmail():
         
             if msg.get_content_type() == "text/html" or "<html" in body:
                 soup = BeautifulSoup(body, "html.parser")
-                for script in soup(["script", "style", "img", "a"]):  
+                for script in soup(["script", "style", "img", "a"]):
                     script.extract()
                 body = soup.get_text(separator=" ", strip=True)
-
 
             if 'transaction' in body.lower() or 'upi' in body.lower():
                 body_list = body.split(' ')
