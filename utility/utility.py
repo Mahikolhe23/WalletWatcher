@@ -2,6 +2,7 @@ import requests
 import imaplib
 from dateutil.parser import parse
 from config.gmail_auth import *
+from datetime import datetime
 
 def get_first_date(words):
     for word in words:
@@ -47,10 +48,12 @@ def get_mails():
         mail.authenticate('XOAUTH2', lambda x: oauth2_string)
         mail.select("inbox")
 
-        result, data = mail.search(None, "ALL")
+        today = datetime.today().strftime('%d-%b-%Y')
+        result, data = mail.search(None, f'(SINCE "{today}")')
 
         email_ids = []
         if result == "OK":
+            print(email_ids)
             email_ids = data[0].split()[-2:]
         else:
             print("Search failed:", result)
