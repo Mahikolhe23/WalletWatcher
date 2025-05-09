@@ -1,43 +1,45 @@
 import email
+import re
+import pandas as pd
+import pytz
+
 from email.header import decode_header
 from bs4 import BeautifulSoup
 from core.fetch_emails import get_mails
 from dateutil.parser import parse
 
-def get_first_date(words):
-    for word in words:
-        try:
-            word = word.strip(".,;:")  
-            dt = parse(word, dayfirst=True, fuzzy=False)
-            return dt
-        except:
-            continue
+merchant_to_category = {
+    "zomato": "Food",
+    "swiggy": "Food",
+    "amazon": "Shopping",
+    "flipkart": "Shopping",
+    "cred": "Credit Card Bill",
+    "paytm": "Recharge/Wallet",
+    "electricity": "Utilities"
+}
+
+def get_amount(text):
+    matches = re.findall(r'(?:rs\.?|inr|₹|amount|amt)[:\-\s]*([\d,]+(?:\.\d{1,2})?)', text.lower())
+    if matches:
+        return matches[0].replace(',', '')
     return None
-
-def get_tran_type(trans):
-    tran = None    
-    for t in trans:
-        if 'debit' in t.lower():
-            tran = 'Debit'
-        if 'credit' in t.lower():
-            tran = 'Credit'
-    return tran
-
-def get_amount(trans):
-    amount = None    
-    for a in trans:
-        if 'rs.' in a.lower():
-            amount = f'{a}'
-    return amount
 
 def email_parser():
     mail, email_ids = get_mails()
-    email_bodies = []
+    columns = ['date', 'mode', 'amount', 'category']
+    email_data = pd.DataFrame(columns=columns)
+
     for email_id in email_ids:
-        result, data = mail.fetch(email_id, "(RFC822)") 
+        result, data = mail.fetch(email_id, "(RFC822)")
         if result == 'OK':
             raw_email = data[0][1]
+
             msg = email.message_from_bytes(raw_email)
+            date_str = msg.get("Date")
+            date_object = email.utils.parsedate_to_datetime(date_str)
+            ist = pytz.timezone('Asia/Kolkata')
+            ist_date_time = date_object.astimezone(ist)
+
             subject, encoding = decode_header(msg["Subject"])[0]
 
         if isinstance(subject, bytes):
@@ -62,9 +64,40 @@ def email_parser():
                 script.extract()
             email_body = soup.get_text(separator=" ", strip=True)
 
-        if email_body:
-            email_bodies.append(email_body)    
+        if 'transaction' in email_body.lower():
+            amount = get_amount(email_body)
+            mode = ''
+            category = ''
 
-    return email_bodies
+            email_body = email_body.lower()            
+
+            for key, category in merchant_to_category.items():
+                if key in email_body:
+                    category = merchant_to_category[key]
+                    break
+                else:
+                    continue        
+
+            if "upi" in email_body or "@ybl" in email_body or "@axl" in email_body:
+                mode = "UPI"
+            elif 'credit card' in email_body:
+                mode = "Credit Card"
+            elif 'debit card' in email_body:
+                mode = "Debit Card"
+            elif any(wallet in email_body for wallet in ["phonepe", "paytm", "google pay"]):
+                mode = "Wallet"
+            else:
+                mode = "Bank Transfer"
+
+            email_data = pd.concat([email_data,pd.DataFrame([
+                {
+                    'date' : ist_date_time,
+                    'mode' : mode,
+                    'amount' : amount,
+                    'category' : category
+                }
+            ])],ignore_index=True)
+
+    return email_data
 
 

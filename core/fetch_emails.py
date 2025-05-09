@@ -1,6 +1,6 @@
 import requests
 import imaplib
-from datetime import datetime
+from datetime import datetime, timedelta
 from config.gmail_auth import get_token
 
 def get_mails():
@@ -21,8 +21,10 @@ def get_mails():
         mail.authenticate('XOAUTH2', lambda x: oauth2_string)
         mail.select("inbox")
 
+        yesterday = (datetime.today() - timedelta(days=2)).strftime('%d-%b-%Y')
         today = datetime.today().strftime('%d-%b-%Y')
-        result, data = mail.search(None, f'(SINCE "{today}")')
+
+        result, data = mail.search(None, f'(SINCE "{yesterday}")')
 
         email_ids = []
         if result == "OK":
