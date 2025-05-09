@@ -1,34 +1,7 @@
 import requests
 import imaplib
-from dateutil.parser import parse
-from config.gmail_auth import *
 from datetime import datetime
-
-def get_first_date(words):
-    for word in words:
-        try:
-            word = word.strip(".,;:")  
-            dt = parse(word, dayfirst=True, fuzzy=False)
-            return dt
-        except:
-            continue
-    return None
-
-def get_tran_type(trans):
-    tran = None    
-    for t in trans:
-        if 'debit' in t.lower():
-            tran = 'Debit'
-        if 'credit' in t.lower():
-            tran = 'Credit'
-    return tran
-
-def get_amount(trans):
-    amount = None    
-    for a in trans:
-        if 'rs.' in a.lower():
-            amount = f'{a}'
-    return amount
+from config.gmail_auth import get_token
 
 def get_mails():
     creds = get_token()
@@ -53,12 +26,10 @@ def get_mails():
 
         email_ids = []
         if result == "OK":
-            print(email_ids)
-            email_ids = data[0].split()[-2:]
+            email_ids = data[0].split()
         else:
             print("Search failed:", result)
     except imaplib.IMAP4.error as e:
         print("Authentication Error:", e)
 
     return mail, email_ids
-
