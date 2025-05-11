@@ -3,10 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 .DS_Store
-config/
-
+secret.json
 .env
-
+token.pickle
 # C extensions
 *.so
 

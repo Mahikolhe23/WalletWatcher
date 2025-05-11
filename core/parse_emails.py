@@ -68,7 +68,7 @@ def email_parser():
             amount = get_amount(email_body)
             mode = ''
             category = ''
-
+            print(email_body)
             email_body = email_body.lower()            
 
             for key, category in merchant_to_category.items():
