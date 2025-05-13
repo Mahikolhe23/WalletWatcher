@@ -6,23 +6,40 @@ from email.header import decode_header
 from bs4 import BeautifulSoup
 from core.fetch_emails import get_mails
 from dateutil.parser import parse
+from rapidfuzz import process, fuzz
+from core.email_categorizer import EmailAutoCategorizer
 
 transactions_keys = ["debited", "credited", "spent", "received", "UPI", "transaction", "payment"]
 
 merchant_to_category = {
     "zomato": "Food",
     "swiggy": "Food",
+    "uber": "Transport",
+    "ola": "Transport",
     "amazon": "Shopping",
     "flipkart": "Shopping",
-    "cred": "Credit Card Bill",
+    "myntra": "Shopping",
     "paytm": "Recharge/Wallet",
-    "electricity": "Utilities"
+    "google pay": "UPI",
+    "gpay": "UPI",
+    "phonepe": "UPI",
+    "electricity": "Utilities",
+    "bescom": "Utilities",
+    "cred": "Credit Card Bill",
+    "hdfc bank": "Bank",
+    "axis bank": "Bank",
+    "icici": "Bank",
+    "groww":"Investment"
 }
 
 payment_category = {
-    "upi" : "UPI",
-    "credit card" : "Credit Card",
-    "debit card" : "Debit Card"
+    "via upi": "UPI",
+    "upi": "UPI",
+    "credit card": "Credit Card",
+    "debit card": "Debit Card",
+    "net banking": "Net Banking",
+    "wallet": "Wallet",
+    "cash": "Cash"
 }
 
 def get_amount(email):
@@ -32,14 +49,13 @@ def get_amount(email):
     return None
 
 def get_category(email):
-    category = ''   
-    for key, category in merchant_to_category.items():
-        if key in email:
-            category = merchant_to_category[key]
-            break
-        else:
-            continue        
-    return category            
+    best_match = process.extractOne(
+        email.lower(),
+        merchant_to_category.keys(),
+        scorer=fuzz.partial_ratio
+    )   
+    if best_match and best_match[1] > 80:
+        return merchant_to_category[best_match[0]]            
 
 def get_mode(email):
     mode = ''    
@@ -76,12 +92,25 @@ def extract_transaction_details(email_body):
     if not any(key in email_body for key in transactions_keys):
         return None
 
-    return { 
-        'mode' : get_mode(email_body),
-        'amount' : get_amount(email_body),
-        'category' : get_category(email_body)
-    }
+    parser = EmailAutoCategorizer()
+    result = parser.predict(email_body)
+    amount = get_amount(email_body)
+    mode = result['mode']
+    category = result['category']
 
+    if amount is not None:
+        transactions_details = {
+        'mode' : mode,
+        'amount' : amount,
+        'category' : category
+        }
+        return transactions_details
+    else:
+        return None
+
+def retrain():
+    parser = EmailAutoCategorizer()
+    parser._train()
 
 def email_parser():
     mail, email_ids = get_mails()

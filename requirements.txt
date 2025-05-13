@@ -6,3 +6,6 @@ google-auth-oauthlib
 google-auth-httplib2
 pickle
 loguru
+scikit-learn
+pandas
+joblib

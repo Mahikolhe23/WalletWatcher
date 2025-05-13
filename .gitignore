@@ -2,10 +2,18 @@
 __pycache__/
 *.py[cod]
 *$py.class
+
+
 .DS_Store
 secret.json
 .env
 token.pickle
+email_category_model.pkl
+email_mode_model.pkl
+vectorizer.pkl
+label_encoder_category.pkl
+label_encoder_mode.pkl
+
 # C extensions
 *.so
 
