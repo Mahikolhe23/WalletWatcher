@@ -13,6 +13,7 @@ email_mode_model.pkl
 vectorizer.pkl
 label_encoder_category.pkl
 label_encoder_mode.pkl
+labeled_emails.csv
 
 # C extensions
 *.so
