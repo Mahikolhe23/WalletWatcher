@@ -19,7 +19,7 @@ merchant_to_category = {
     "amazon": "Shopping",
     "flipkart": "Shopping",
     "myntra": "Shopping",
-    "paytm": "Recharge/Wallet",
+    "paytm": "UPI",
     "google pay": "UPI",
     "gpay": "UPI",
     "phonepe": "UPI",
@@ -29,7 +29,10 @@ merchant_to_category = {
     "hdfc bank": "Bank",
     "axis bank": "Bank",
     "icici": "Bank",
-    "groww":"Investment"
+    "groww":"Investment",
+    "zerodha":"Investment",
+    "SBI":"Bank",
+    "coindcx":"Investment"
 }
 
 payment_category = {
