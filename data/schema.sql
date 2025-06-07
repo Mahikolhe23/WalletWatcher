@@ -18,3 +18,5 @@ BEGIN
     )
 END
 GO
+SELECT * FROM transactions
+

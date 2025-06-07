@@ -2,6 +2,7 @@ from loguru import logger
 from core.parse_emails import retrain
 from data.save_trans import save_trans_to_db 
 from dashboard.report_generator import generate_report
+from services.email_notifier import send_email_alert
 
 def get_filter_email_data():
     # Train Model
@@ -14,6 +15,7 @@ def get_filter_email_data():
     report = generate_report()
     print(report)
 
+    send_email_alert()
 
 
 
