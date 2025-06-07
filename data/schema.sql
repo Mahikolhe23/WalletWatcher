@@ -18,6 +18,3 @@ BEGIN
     )
 END
 GO
-
-SELECT * FROm transactions
-DROP TABLE transactions

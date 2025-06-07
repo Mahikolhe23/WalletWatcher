@@ -1,5 +1,4 @@
 import urllib.parse
-import pyodbc
 import urllib
 from sqlalchemy import create_engine
 from config.config import SERVER , USER, PASSWORD, DRIVER

@@ -1,38 +1,17 @@
 from core.parse_emails import email_parser
 from config.db_conn import get_connection
+from dateutil.parser import parse
+import pandas as pd
 
 def save_trans_to_db():
-    email_data = email_parser()
     conn = get_connection()
+    data = email_parser()
+    df = pd.DataFrame(data, columns=['date', 'mode', 'amount', 'category'])
 
-    sql_query = """
-                    IF NOT EXISTS (SELECT 1 FROM sys.databases WHERE name = 'wallet_watcher')
-                    BEGIN
-                        CREATE DATABASE wallet_watcher
-                    END
-                    GO
-
-                    USE wallet_watcher
-                    GO
-
-                    IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'transactions')
-                    BEGIN
-                        CREATE TABLE transactions(
-                            trans_id INT IDENTITY(1,1) ,
-                            trans_date DATETIME ,
-                            trans_mode VARCHAR(20) ,
-                            trans_amount FLOAT ,
-                            trans_category VARCHAR(30)
-                        )
-                    END
-                    GO
-                """
-
-    conn.execute(sql_query)
-
-    sql_query = """
-                    INSERT INTO transactions(trans_date, trans_mode, trans_amount, trans_category)
-                    VALUES
-                """
+    df['date'] = pd.to_datetime(df['date']).dt.tz_localize(None)
+    df['amount'] = df['amount'].astype(float)
+    df['mode'] = df["mode"].astype(str)
+    df['category'] = df['category'].astype(str)
+    df.to_sql(name='transactions', con=conn, if_exists='append', index=False)
 
 
