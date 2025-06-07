@@ -9,3 +9,5 @@ loguru
 scikit-learn
 pandas
 joblib
+sqlalchemy
+urllib

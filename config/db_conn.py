@@ -1,4 +1,7 @@
+import urllib.parse
 import pyodbc
+import urllib
+from sqlalchemy import create_engine
 from config.config import SERVER , USER, PASSWORD, DRIVER
 
 server = SERVER
@@ -8,14 +11,7 @@ driver = DRIVER
 database = 'wallet_watcher'
 
 def get_connection():
-    try:
-        connetion = pyodbc.connect(f'DRIVER={driver};SERVER={server};DATABASE={database}:UID={user};PWD={password};TrustServerCertificate=yes;')
-        print('Connection succesfull')
-    except Exception as e:
-        print(f'Connect failed - {e}')
-    conn = connetion.cursor()
-    return conn
-
-
-
+    params = urllib.parse.quote_plus(f'DRIVER={driver};SERVER={server};DATABASE={database};UID={user};PWD={password};TrustServerCertificate=yes')
+    engine = create_engine(f'mssql+pyodbc:///?odbc_connect={params}')
+    return engine
 

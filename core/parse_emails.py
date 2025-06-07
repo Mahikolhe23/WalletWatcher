@@ -8,6 +8,7 @@ from core.fetch_emails import get_mails
 from dateutil.parser import parse
 from rapidfuzz import process, fuzz
 from core.email_categorizer import EmailAutoCategorizer
+from config.db_conn import get_connection
 
 transactions_keys = ["debited", "credited", "spent", "received", "UPI", "transaction", "payment"]
 
@@ -146,6 +147,16 @@ def email_parser():
                 **transactions
             })
 
-    return pd.DataFrame(data, columns=['date', 'mode', 'amount', 'category'])
+    conn = get_connection()
+    df = pd.DataFrame(data, columns=['date', 'mode', 'amount', 'category'])
+
+    df['date'] = pd.to_datetime(df['date']).dt.tz_localize(None)
+    df['amount'] = df['amount'].astype(float)
+    df['mode'] = df["mode"].astype(str)
+    df['category'] = df['category'].astype(str)
+    df.to_sql(name='transactions', con=conn, if_exists='append', index=False)
+    return df
+
+
 
 
