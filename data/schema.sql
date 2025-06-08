@@ -20,3 +20,4 @@ END
 GO
 SELECT * FROM transactions
 
+DROP TABLE transactions
