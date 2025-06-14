@@ -21,7 +21,7 @@ def get_mails():
         mail.authenticate('XOAUTH2', lambda x: oauth2_string)
         mail.select("inbox")
 
-        yesterday = (datetime.today() - timedelta(days=1)).strftime('%d-%b-%Y')
+        yesterday = (datetime.today() - timedelta(days=2)).strftime('%d-%b-%Y')
         today = datetime.today().strftime('%d-%b-%Y')
 
         result, data = mail.search(None, f'(SINCE "{yesterday}")')

@@ -10,6 +10,3 @@ def generate_report():
     df = df.reset_index(drop=True)
     return df
     
-
-
-

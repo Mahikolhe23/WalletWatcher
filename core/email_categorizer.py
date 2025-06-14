@@ -14,7 +14,7 @@ class EmailAutoCategorizer:
     VECTORIZER_PATH = "./config/vectorizer.pkl"
     LABEL_ENCODER_CATEGORY_PATH = "./config/label_encoder_category.pkl"
     LABEL_ENCODER_MODE_PATH = "./config/label_encoder_mode.pkl"
-    DATA_PATH = "./data/labeled_emails.csv"
+    DATA_PATH = "./data/records_for_model.csv"
 
     def __new__(cls):
         if cls._instance is None:

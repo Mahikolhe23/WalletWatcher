@@ -1,11 +1,14 @@
 import email
 import re
 import pytz
+import os
 from email.header import decode_header
 from bs4 import BeautifulSoup
 from core.fetch_emails import get_mails
 from rapidfuzz import process, fuzz
+from datetime import datetime, timedelta
 from core.email_categorizer import EmailAutoCategorizer
+
 
 transactions_keys = ["debited", "credited", "spent", "received", "UPI", "transaction", "payment"]
 
@@ -113,14 +116,14 @@ def retrain():
     parser = EmailAutoCategorizer()
     parser._train()
 
-def email_parser():
+def email_parser(file_download_path=None):
     mail, email_ids = get_mails()
     data = []
     for email_id in email_ids:
         result, fetch_data = mail.fetch(email_id, "(RFC822)")
         if result != 'OK':
             continue
-
+   
         raw_email = fetch_data[0][1]
         raw_msg = email.message_from_bytes(raw_email)
 
@@ -131,6 +134,24 @@ def email_parser():
         except:
             continue
 
+        for part in raw_msg.walk():
+            if part.get_content_disposition() == 'attachment':
+                file_name = part.get_filename()
+                
+                if file_name:
+                    file_date = str(email_date.strftime('%Y-%m-%d'))[0:10].replace('-','_')
+                    file_path = f'{file_download_path}/{file_date}/'
+
+                    if not os.path.isdir(file_path):
+                        os.mkdir(file_path)
+
+                    file_path = os.path.join(file_path, file_name)
+
+                    with open(file_path, 'wb') as file:
+                        file.write(part.get_payload(decode=True))
+                else:
+                    print('No Attachment Found')   
+            
         subject, encoding = decode_header(raw_msg["Subject"])[0]
         if isinstance(subject, bytes):
             subject = subject.decode(encoding if encoding else "utf-8")
