@@ -4,7 +4,7 @@ from data.save_trans import save_trans_to_db
 from dashboard.report_generator import generate_report
 from services.email_notifier import send_email_alert
 from core.parse_emails import email_parser
-# from services.file_download import file_download 
+from services.password_remover import remove_password
 
 def get_filter_email_data():
     file_path = '/Users/mahendrakolhe/Projects/WalletWatcher/data/downloaded_files'
@@ -15,6 +15,7 @@ def get_filter_email_data():
     # save_trans_to_db()
     
     email_parser(file_path)
+    remove_password(file_path)
     
     # Generate report
     # report = generate_report()
