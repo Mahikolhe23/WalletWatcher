@@ -12,9 +12,10 @@ def get_filter_email_data():
     retrain()
 
     # Save Parse data to db
-    # save_trans_to_db()
+    # save_trans_to_db(file_path)
     
-    email_parser(file_path)
+    user_name = 'Mahendra'
+    email_parser(file_path, user_name)
     remove_password(file_path)
     
     # Generate report
@@ -22,7 +23,6 @@ def get_filter_email_data():
     # print(report)
 
     # send_email_alert()
-
 
 
 if __name__ == "__main__":

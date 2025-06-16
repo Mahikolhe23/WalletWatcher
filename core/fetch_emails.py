@@ -3,8 +3,8 @@ import imaplib
 from datetime import datetime, timedelta
 from config.gmail_auth import get_token
 
-def get_mails():
-    creds = get_token()
+def get_mails(user_name):
+    creds = get_token(user_name)
     access_token = creds.token
 
     user_info = requests.get(
@@ -21,7 +21,7 @@ def get_mails():
         mail.authenticate('XOAUTH2', lambda x: oauth2_string)
         mail.select("inbox")
 
-        yesterday = (datetime.today() - timedelta(days=3)).strftime('%d-%b-%Y')
+        yesterday = (datetime.today() - timedelta(days=1)).strftime('%d-%b-%Y')
         today = datetime.today().strftime('%d-%b-%Y')
 
         result, data = mail.search(None, f'(SINCE "{yesterday}")')

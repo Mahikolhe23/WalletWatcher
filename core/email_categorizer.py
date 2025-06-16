@@ -9,11 +9,11 @@ class EmailAutoCategorizer:
     _instance = None
 
     # Paths
-    MODEL_CATEGORY_PATH = "./config/email_category_model.pkl"
-    MODEL_MODE_PATH = "./config/email_mode_model.pkl"
-    VECTORIZER_PATH = "./config/vectorizer.pkl"
-    LABEL_ENCODER_CATEGORY_PATH = "./config/label_encoder_category.pkl"
-    LABEL_ENCODER_MODE_PATH = "./config/label_encoder_mode.pkl"
+    MODEL_CATEGORY_PATH = "./config/model/email_category_model.pkl"
+    MODEL_MODE_PATH = "./config/model/email_mode_model.pkl"
+    VECTORIZER_PATH = "./config/model/vectorizer.pkl"
+    LABEL_ENCODER_CATEGORY_PATH = "./config/model/label_encoder_category.pkl"
+    LABEL_ENCODER_MODE_PATH = "./config/model/label_encoder_mode.pkl"
     DATA_PATH = "./data/records_for_model.csv"
 
     def __new__(cls):

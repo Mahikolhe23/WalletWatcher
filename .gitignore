@@ -7,13 +7,6 @@ __pycache__/
 .DS_Store
 secret.json
 .env
-token.pickle
-email_category_model.pkl
-email_mode_model.pkl
-vectorizer.pkl
-label_encoder_category.pkl
-label_encoder_mode.pkl
-labeled_emails.csv
 
 downloaded_files/
 
@@ -21,6 +14,10 @@ downloaded_files/
 *.so
 
 # Distribution / packaging
+model/
+secrets/
+tokens/
+
 .Python
 build/
 develop-eggs/

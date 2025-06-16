@@ -2,9 +2,17 @@ import pickle
 import os
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-from config.config import TOKEN_PATH, CREDENTIALS_PATH, SCOPES
+from config.config import BASE_DIR, CREDENTIALS_PATH, SCOPES
+from dotenv import load_dotenv
 
-def get_token():
+load_dotenv()
+
+def get_token(user_name):
+    USER_PATH = f'{BASE_DIR}/tokens/{user_name}/'
+    if not os.path.exists(USER_PATH) :
+        os.mkdir(USER_PATH)
+
+    TOKEN_PATH = f'{USER_PATH}/{os.getenv('TOKEN_FILENAME')}'
     creds = None
     if os.path.exists(TOKEN_PATH) :
         with open(TOKEN_PATH,'rb') as token:

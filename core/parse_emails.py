@@ -116,8 +116,8 @@ def retrain():
     parser = EmailAutoCategorizer()
     parser._train()
 
-def email_parser(file_download_path=None):
-    mail, email_ids = get_mails()
+def email_parser(file_download_path=None, user_name= None):
+    mail, email_ids = get_mails(user_name)
     data = []
     for email_id in email_ids:
         result, fetch_data = mail.fetch(email_id, "(RFC822)")
