@@ -118,8 +118,8 @@ def json_to_dataframe(data_in):
     return pd.DataFrame(flatten_json(data_in))
 
 def pdf_to_csv():
-    pdf_file_path = '/Users/mahendrakolhe/Downloads/3-06-26 Tenterfield REPORT NM.pdf'
-    csv_file_path = './pdf-extractor/output_hierarchical.csv'
+    pdf_file_path = '../data/downloaded_files/2025_06_15/4035XXXXXXXX4017_266039_Retail_Coral_NORM.pdf'
+    csv_file_path = '../data/downloaded_files/2025_06_15/4035XXXXXXXX4017_266039_Retail_Coral_NORM.csv'
 
     json_data = get_pdf_data(pdf_file_path)
 
@@ -132,7 +132,6 @@ def pdf_to_csv():
 
 def get_report():
     pdf_to_csv()
-    csv_file_path = './pdf-extractor/output_hierarchical.csv'
     
 
 get_report()    
