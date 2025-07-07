@@ -4,10 +4,13 @@ openpyxl
 google-auth 
 google-auth-oauthlib 
 google-auth-httplib2
-pickle
 loguru
 scikit-learn
 pandas
 joblib
 sqlalchemy
-urllib
+bs4
+dotenv
+rapidfuzz
+google-api-python-client
+pikepdf

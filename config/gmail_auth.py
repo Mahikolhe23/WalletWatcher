@@ -12,7 +12,7 @@ def get_token(user_name):
     if not os.path.exists(USER_PATH) :
         os.mkdir(USER_PATH)
 
-    TOKEN_PATH = f'{USER_PATH}/{os.getenv('TOKEN_FILENAME')}'
+    TOKEN_PATH = f"{USER_PATH}/{os.getenv('TOKEN_FILENAME')}"
     creds = None
     if os.path.exists(TOKEN_PATH) :
         with open(TOKEN_PATH,'rb') as token:
