@@ -2,7 +2,7 @@ pandas
 imaplib2
 openpyxl
 google-auth 
-google-auth-oauthlib 
+google-auth-oauthlib>=0.4.1
 google-auth-httplib2
 loguru
 scikit-learn

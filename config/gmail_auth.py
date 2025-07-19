@@ -28,4 +28,3 @@ def get_token(user_name):
             with open(TOKEN_PATH,'wb') as token:
                 pickle.dump(creds, token)
     return creds 
-

@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  walletwatcher:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: walletwatcher
+    image: walletwatcher:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app                
+      - ./config:/app/config  
+    environment:
+      - PYTHONUNBUFFERED=1
+    tty: true

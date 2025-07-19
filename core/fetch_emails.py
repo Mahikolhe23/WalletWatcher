@@ -24,7 +24,7 @@ def get_mails(user_name):
         yesterday = (datetime.today() - timedelta(days=15)).strftime('%d-%b-%Y')
         today = datetime.today().strftime('%d-%b-%Y')
 
-        result, data = mail.search(None, f'(SINCE "{yesterday}")')
+        result, data = mail.search(None, f'(SINCE "{today}")')
 
         email_ids = []
         if result == "OK":
