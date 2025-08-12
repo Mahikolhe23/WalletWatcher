@@ -17,6 +17,7 @@ def get_mails(user_name):
 
     mail = imaplib.IMAP4_SSL('imap.gmail.com')
 
+    email_ids = []
     try:
         mail.authenticate('XOAUTH2', lambda x: oauth2_string)
         mail.select("inbox")
@@ -26,7 +27,6 @@ def get_mails(user_name):
 
         result, data = mail.search(None, f'(SINCE "{today}")')
 
-        email_ids = []
         if result == "OK":
             email_ids = data[0].split()
         else:
