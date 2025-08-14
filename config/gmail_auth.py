@@ -20,8 +20,13 @@ def get_token(user_name):
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
+            try:
+                creds.refresh(Request())
+            except RefreshError:
+                os.remove(TOKEN_PATH)
+                return get_token(user_name)
         else:
+            print(f'path{CREDENTIALS_PATH}')
             flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_PATH, SCOPES)
             creds = flow.run_local_server(port=8080)
             

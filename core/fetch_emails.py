@@ -19,13 +19,14 @@ def get_mails(user_name):
 
     email_ids = []
     try:
-        mail.authenticate('XOAUTH2', lambda x: oauth2_string)
+        mail.authenticate('XOAUTH2', lambda _: f"user={user_email}\x01auth=Bearer {access_token}\x01\x01".encode("utf-8"))
+
         mail.select("inbox")
 
         yesterday = (datetime.today() - timedelta(days=15)).strftime('%d-%b-%Y')
         today = datetime.today().strftime('%d-%b-%Y')
 
-        result, data = mail.search(None, f'(SINCE "{today}")')
+        result, data = mail.search(None, f'(SINCE "{yesterday}")')
 
         if result == "OK":
             email_ids = data[0].split()
@@ -33,6 +34,6 @@ def get_mails(user_name):
             print("Search failed:", result)
     except imaplib.IMAP4.error as e:
         print("Authentication Error:", e)
-
+    print(email_ids)
     return mail, email_ids
 
