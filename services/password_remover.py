@@ -15,8 +15,6 @@ def get_all_files(folder_path):
 def remove_password(folder_path):
     all_files = get_all_files(folder_path)
 
-    passwords = ['HPCPK0146D','23051996','2305@8043','MAHE2305','MAHE8043','7350458043','niki2603']
-
     for file in all_files:
         for password in passwords:
             try:
